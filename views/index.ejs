@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Blog App</title>
+    <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.4.1/semantic.min.css">
+    <link rel="stylesheet" type="text/css" href="stylesheet/app.css">
+</head>
+<body>
+<div class="ui fixed inverted menu">
+    <div class="ui container">
+        <div class="header item">
+            <i class="code icon"></i> Blog Site
+        </div>
+        <a class="item" href="/">Home</a>
+        <a class="item" href="/blogs/new">New Post</a>
+    </div>
+</div>
+
+<h1>index page</h1>
+<%blogs.forEach((blog)=> {%>
+<div>
+    <h2><%=blog.title%></h2>
+    <img src="<%=blog.image%>">
+    <span>Created: <%=blog.created%></span>
+    <% if (blog.body) { %>
+    <span>Created: <%=blog.body.substring(0, 300)%></span>
+    <% } %>
+    <a href='/blogs/<%=blog._id%>'>Read more</a>
+</div>
+<% })%>
+<%{ %>
+    <h3>USD to <%= data.curr %><span id="currency">: <%= data.value %></span></h3>
+<% } %>
+
+<div class="header">
+    <h1>Freepic Image search Engine</h1>
+</div>
+
+<form id="search-form">
+    <input type="text" id="search-box" placeholder="Search anything here...">
+    <button>Search</button>
+</form>
+<div id="search-result"></div>
+<button id="show-more-btn">Show more</button>
+
+<div class="container">
+
+    <h1 id="jokes">Jokes</h1>
+    <button id="generate">Get More</button>
+    <h1>Click FOR FUN</h1>
+</div>
+
+<script>
+    const accessKey = "6zn8an9-U4moyMi5Zz-FFZ_ORX2EFEfrcgoiqMzrRb4";
+
+    const searchForm = document.getElementById("search-form");
+    const searchBox = document.getElementById("search-box");
+    const searchResult = document.getElementById("search-result");
+    const showMoreBtn = document.getElementById("show-more-btn");
+
+    let keyword = "";
+    let page = 1;
+
+    async function searchImages() {
+        keyword = searchBox.value;
+        const url = `https://api.unsplash.com/search/photos?page=${page}1&query=${keyword}&client_id=${accessKey}&per_page=12`;
+        const response = await fetch(url);
+        const data = await response.json();
+
+        if(page === 1){
+            searchResult.innerHTML = "";
+        }
+
+        const results = data.results;
+        results.map((result) => {
+            const image = document.createElement("img");
+            image.src = result.urls.small;
+            const imageLink = document.createElement("a");
+            imageLink.href = result.links.html;
+            imageLink.target = "_blank";
+
+            imageLink.appendChild(image);
+            searchResult.appendChild(imageLink);
+
+        })
+        showMoreBtn.style.display = "block";
+    }
+
+    searchForm.addEventListener("submit", (e) => {
+        e.preventDefault();
+        page = 1;
+        searchImages();
+    });
+
+    showMoreBtn.addEventListener("click", ()=>{
+        page++;
+        searchImages();
+    })
+
+    const jokesEl = document.getElementById('jokes');
+    const btnEl = document.getElementById('generate');
+
+    btnEl.addEventListener('click', generateJoke);
+
+    generateJoke();
+
+    async function generateJoke() {
+        const config = {
+            headers: {
+                Accept: 'application/json',
+            },
+        }
+
+        const api = await fetch('https://icanhazdadjoke.com', config)
+
+        const content = await api.json()
+
+        jokesEl.innerHTML = content.joke
+    }
+</script>
+<form action="/logout?_method=DELETE" method="POST">
+    <button type="submit">Log Out</button>
+</form>
+</body>
+</html>
