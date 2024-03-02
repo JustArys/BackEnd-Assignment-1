@@ -241,9 +241,9 @@ async function isAdmin(req, res, next) {
         res.status(500).json({ message: 'Server Error'});
     }
 }
-const PORT = process.env.PORT || 8080;
+const PORT = process.env.PORT;
 
-app.listen(8080, () => {
+app.listen(PORT, () => {
     console.log(`Server is running on port ${PORT}`);
 });
 
@@ -283,7 +283,7 @@ async function sendMail(email){
     });
     console.log("Message sent: %s", info.messageId);
 }
-const uri = "mongodb+srv://abievarystanbek:Just_arys7@cluster0.hto8ivm.mongodb.net/Node-API?retryWrites=true&w=majority";
+const uri = process.env.MONGO;
 mongoose.set("strictQuery", false)
 mongoose.connect(uri).then(() => {
     console.log("connected to MongoDB")
