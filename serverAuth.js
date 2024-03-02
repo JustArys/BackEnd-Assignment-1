@@ -241,9 +241,9 @@ async function isAdmin(req, res, next) {
         res.status(500).json({ message: 'Server Error'});
     }
 }
-const PORT = process.env.PORT || 3000;
+const PORT = process.env.PORT || 8080;
 
-app.listen(PORT, () => {
+app.listen(8080, () => {
     console.log(`Server is running on port ${PORT}`);
 });
 
