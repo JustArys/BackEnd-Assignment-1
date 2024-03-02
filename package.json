@@ -2,8 +2,9 @@
   "name": "assignment-1-backend",
   "version": "1.0.0",
   "description": "",
-  "main": "serverAuth.js.js",
+  "main": "serverAuth.js",
   "scripts": {
+    "start": "nodemon serverAuth.js",
     "devStart": "nodemon serverAuth.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
